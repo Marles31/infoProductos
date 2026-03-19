@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Secrets
+.env
+credentials.json
+token.json
+
+# Temporary artifacts
+.tmp/*
+!.tmp/.gitkeep

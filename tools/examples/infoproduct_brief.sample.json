@@ -1,0 +1,33 @@
+{
+  "topic": "Productividad para freelancers",
+  "audience": "Freelancers que trabajan solos",
+  "page_count": 5,
+  "offer_name": "Metodo Cierre Semanal",
+  "goal": "vender una guia digital",
+  "cta": "Responde QUIERO y te envio la guia completa hoy.",
+  "visual_style": "editorial minimalista, tonos neutros, iluminacion suave, composicion limpia",
+  "aspect_ratio": "3:2",
+  "image_size": "1K",
+  "research": {
+    "pain_points": [
+      "Empiezan la semana sin prioridades claras.",
+      "Cambian de tarea cada hora y pierden foco.",
+      "No saben cerrar pendientes antes del fin de semana."
+    ],
+    "desired_outcomes": [
+      "Terminar entregas clave sin trasnochar.",
+      "Tener una agenda realista y sostenible.",
+      "Mantener ingresos estables con menos caos."
+    ],
+    "objections": [
+      "No tengo tiempo para aprender otro sistema.",
+      "Ya probe metodos y no me funcionaron.",
+      "No soy disciplinado para sostener rutinas."
+    ],
+    "proof_points": [
+      "Plantilla semanal en 20 minutos.",
+      "Metodo aplicado en distintos nichos freelance.",
+      "Resultados visibles desde la primera semana."
+    ]
+  }
+}

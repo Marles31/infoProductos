@@ -1,0 +1,36 @@
+{
+  "topic": "Productividad para freelancers",
+  "ideas": [
+    {
+      "id": "idea_1",
+      "title": "Sistema semanal para cerrar entregas sin estres",
+      "audience": "Freelancers que trabajan solos",
+      "signals": {
+        "demand": 8.7,
+        "purchase_intent": 8.3,
+        "competition_gap": 7.1,
+        "differentiation": 7.8,
+        "execution_ease": 8.4
+      },
+      "evidence": [
+        "Preguntas repetidas en comunidades sobre gestion semanal.",
+        "Busquedas frecuentes sobre productividad para independientes."
+      ]
+    },
+    {
+      "id": "idea_2",
+      "title": "Plantilla avanzada de Notion para agencias",
+      "audience": "Equipos de 5 a 20 personas",
+      "signals": {
+        "demand": 6.9,
+        "purchase_intent": 6.8,
+        "competition_gap": 4.9,
+        "differentiation": 5.1,
+        "execution_ease": 7.0
+      },
+      "evidence": [
+        "Mercado con alta saturacion de plantillas similares."
+      ]
+    }
+  ]
+}

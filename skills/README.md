@@ -1,0 +1,15 @@
+# Skills del proyecto
+
+Skills creadas para el MVP:
+
+- `skills/investigacion-mercado-lite`
+- `skills/redaccion-infoproducto-5-10`
+- `skills/nano-banana-prompting`
+- `skills/mvp-infoproduct-orquestador`
+
+Cada skill contiene su `SKILL.md` con:
+
+- frontmatter (`name`, `description`)
+- objetivo
+- flujo
+- comandos reutilizables
