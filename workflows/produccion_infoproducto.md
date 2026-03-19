@@ -1,40 +1,27 @@
-# Produccion infoproducto (5 o 10 paginas)
+# Produccion infoproducto (copy)
 
 ## Objetivo
 
-Convertir un brief validado en copy estructurado y prompts visuales listos.
+Crear copy marketero por pagina con lenguaje claro, bullets y estructura de conversion.
 
-## Entrada
+## Skills obligatorias
 
-JSON con:
-
-- `topic`
-- `audience`
-- `page_count` (`5` o `10`)
-- `offer_name`
-- `goal`
-- `cta`
-- `research.pain_points`
-- `research.desired_outcomes`
-- `research.objections`
-- `research.proof_points`
+1. `skills/redaccion-infoproducto-5-10/SKILL.md`
+2. `skills/copy-marketero-directo/SKILL.md`
 
 ## Tool
 
-`tools/build_infoproduct.py`
+`tools/build_infoproduct_marketing.py`
 
-## Command
+## Comando
 
 ```powershell
-python tools/build_infoproduct.py `
-  --input .tmp/infoproduct_brief.json `
-  --out-json .tmp/infoproduct/infoproduct.json `
-  --out-md .tmp/infoproduct/infoproduct.md `
-  --prompts-json .tmp/infoproduct/nano_prompts.json
+python tools/build_infoproduct_marketing.py `
+  --input .tmp/projects/<slug>/inputs/brief.json `
+  --output .tmp/projects/<slug>/outputs/infoproduct_marketing.json
 ```
 
-## Salidas
+## Validacion
 
-- JSON estructurado para automatizar
-- Markdown para revision humana
-- JSON de prompts para Nano Banana
+- Cada pagina incluye: `hook`, `body`, `bullets`, `quick_wins`, `avoid_list`, `action_steps`.
+- El JSON incluye `brand.palette` y `prompting`.

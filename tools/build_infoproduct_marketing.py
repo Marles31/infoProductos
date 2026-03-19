@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Genera un infoproducto con copy de conversion (no esquema tecnico)."""
+"""Genera un infoproducto marketero agnostico, claro y parametrizable."""
 
 from __future__ import annotations
 
 import argparse
+import colorsys
+import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -39,33 +41,236 @@ def pick(items: list[str], idx: int, fallback: str) -> str:
     return items[idx % len(items)]
 
 
-def page_blueprint(page_count: int) -> list[dict[str, str]]:
+def clamp01(value: float) -> float:
+    return max(0.0, min(1.0, value))
+
+
+def hsl_to_hex(h: float, s: float, l: float) -> str:
+    hh = (h % 360.0) / 360.0
+    r, g, b = colorsys.hls_to_rgb(hh, clamp01(l), clamp01(s))
+    return f"#{int(r * 255):02X}{int(g * 255):02X}{int(b * 255):02X}"
+
+
+def infer_palette(topic: str, brand: dict[str, Any]) -> dict[str, str]:
+    explicit = brand.get("palette")
+    if isinstance(explicit, dict) and all(
+        k in explicit for k in ("bg", "surface", "accent", "accent_2", "text", "muted")
+    ):
+        return {
+            "bg": str(explicit["bg"]),
+            "surface": str(explicit["surface"]),
+            "accent": str(explicit["accent"]),
+            "accent_2": str(explicit["accent_2"]),
+            "text": str(explicit["text"]),
+            "muted": str(explicit["muted"]),
+        }
+
+    topic_l = topic.lower()
+    presets: list[tuple[list[str], dict[str, str]]] = [
+        (
+            ["zombie", "horror", "terror", "suspenso", "apocalipsis"],
+            {"bg": "#12131B", "surface": "#1D2330", "accent": "#D85A36", "accent_2": "#9DC7FF", "text": "#F2F5F9", "muted": "#BCC6D3"},
+        ),
+        (
+            ["finanzas", "dinero", "inversion", "negocio", "ventas", "marketing"],
+            {"bg": "#101826", "surface": "#1A2538", "accent": "#2DBA8B", "accent_2": "#F2C14E", "text": "#F4F7FA", "muted": "#B9C5D3"},
+        ),
+        (
+            ["salud", "fitness", "bienestar", "nutricion"],
+            {"bg": "#0F1C1C", "surface": "#1A2B2A", "accent": "#27AE7E", "accent_2": "#7ED6C5", "text": "#F3F9F8", "muted": "#B8CCC9"},
+        ),
+        (
+            ["belleza", "moda", "estilo", "makeup"],
+            {"bg": "#1B141C", "surface": "#2A1E2B", "accent": "#E06BA8", "accent_2": "#F5C1D9", "text": "#FAF4F7", "muted": "#D8C4CF"},
+        ),
+        (
+            ["tecnologia", "ia", "ai", "software", "programacion"],
+            {"bg": "#0D1523", "surface": "#17243A", "accent": "#3FA9F5", "accent_2": "#7CDAFF", "text": "#EFF5FC", "muted": "#B5C5D7"},
+        ),
+    ]
+    for keywords, palette in presets:
+        if any(k in topic_l for k in keywords):
+            return palette
+
+    seed = int(hashlib.sha256(topic.encode("utf-8")).hexdigest()[:8], 16)
+    hue = seed % 360
+    mode = str(brand.get("mode", "dark")).lower()
+    if mode == "light":
+        return {
+            "bg": hsl_to_hex(hue, 0.22, 0.96),
+            "surface": hsl_to_hex(hue, 0.28, 0.99),
+            "accent": hsl_to_hex(hue, 0.64, 0.49),
+            "accent_2": hsl_to_hex(hue + 36, 0.66, 0.52),
+            "text": hsl_to_hex(hue, 0.18, 0.14),
+            "muted": hsl_to_hex(hue, 0.14, 0.36),
+        }
+    return {
+        "bg": hsl_to_hex(hue, 0.24, 0.09),
+        "surface": hsl_to_hex(hue, 0.24, 0.15),
+        "accent": hsl_to_hex(hue, 0.64, 0.54),
+        "accent_2": hsl_to_hex(hue + 40, 0.68, 0.58),
+        "text": "#F4F6F8",
+        "muted": hsl_to_hex(hue, 0.14, 0.74),
+    }
+
+
+def fallback_blueprint(page_count: int) -> list[dict[str, str]]:
     if page_count == 5:
         return [
-            {"title": "Impacto inicial", "focus": "urgencia"},
-            {"title": "Errores que te eliminan", "focus": "dolor"},
-            {"title": "Plan 72H", "focus": "accion"},
-            {"title": "Checklist tactico", "focus": "ejecucion"},
-            {"title": "Oferta y cierre", "focus": "conversion"},
+            {"title": "Impacto inicial", "focus": "urgencia", "pattern": "hero_split", "icon": "pulse", "goal": "capturar atencion"},
+            {"title": "Error principal", "focus": "dolor", "pattern": "alert_grid", "icon": "alert", "goal": "romper el bloqueo clave"},
+            {"title": "Marco de solucion", "focus": "estrategia", "pattern": "framework_stack", "icon": "shield", "goal": "dar estructura accionable"},
+            {"title": "Implementacion guiada", "focus": "accion", "pattern": "checklist_cards", "icon": "check", "goal": "acelerar ejecucion"},
+            {"title": "Oferta y CTA", "focus": "conversion", "pattern": "offer_stack", "icon": "target", "goal": "convertir en lead o compra"},
         ]
     return [
-        {"title": "Impacto inicial", "focus": "urgencia"},
-        {"title": "Error 1: entrar en panico", "focus": "dolor"},
-        {"title": "Error 2: improvisar sin kit", "focus": "dolor"},
-        {"title": "Error 3: moverte sin ruta", "focus": "dolor"},
-        {"title": "Marco de supervivencia", "focus": "estrategia"},
-        {"title": "Paso 1: asegurar lo basico", "focus": "accion"},
-        {"title": "Paso 2: moverte con criterio", "focus": "accion"},
-        {"title": "Paso 3: sostenerte 30 dias", "focus": "accion"},
-        {"title": "Objeciones y respuesta", "focus": "credibilidad"},
-        {"title": "Cierre con oferta", "focus": "conversion"},
+        {"title": "Impacto inicial", "focus": "urgencia", "pattern": "hero_split", "icon": "pulse", "goal": "capturar atencion"},
+        {"title": "Error #1", "focus": "dolor", "pattern": "alert_grid", "icon": "alert", "goal": "eliminar el primer bloqueo"},
+        {"title": "Error #2", "focus": "dolor", "pattern": "checklist_cards", "icon": "check", "goal": "evitar desgaste innecesario"},
+        {"title": "Error #3", "focus": "dolor", "pattern": "route_map", "icon": "map", "goal": "reducir decisiones ciegas"},
+        {"title": "Marco de solucion", "focus": "estrategia", "pattern": "framework_stack", "icon": "shield", "goal": "ordenar prioridades"},
+        {"title": "Paso 1", "focus": "accion", "pattern": "checklist_cards", "icon": "check", "goal": "activar la base minima"},
+        {"title": "Paso 2", "focus": "accion", "pattern": "route_map", "icon": "route", "goal": "ejecutar con criterio"},
+        {"title": "Paso 3", "focus": "accion", "pattern": "energy_meter", "icon": "bolt", "goal": "optimizar continuidad"},
+        {"title": "Objeciones y respuestas", "focus": "credibilidad", "pattern": "comparison_split", "icon": "chat", "goal": "desactivar dudas"},
+        {"title": "Oferta final y CTA", "focus": "conversion", "pattern": "offer_stack", "icon": "target", "goal": "cerrar conversion"},
+    ]
+
+
+def resolve_blueprint(brief: dict[str, Any], page_count: int) -> list[dict[str, str]]:
+    custom = brief.get("page_blueprint")
+    if not isinstance(custom, list):
+        return fallback_blueprint(page_count)
+
+    normalized: list[dict[str, str]] = []
+    for idx, item in enumerate(custom, start=1):
+        if not isinstance(item, dict):
+            continue
+        normalized.append(
+            {
+                "title": str(item.get("title", f"Pagina {idx}")).strip(),
+                "focus": str(item.get("focus", "accion")).strip() or "accion",
+                "pattern": str(item.get("pattern", "hero_split")).strip() or "hero_split",
+                "icon": str(item.get("icon", "info")).strip() or "info",
+                "goal": str(item.get("goal", "avanzar")).strip() or "avanzar",
+            }
+        )
+    if len(normalized) < page_count:
+        normalized.extend(fallback_blueprint(page_count)[len(normalized):page_count])
+    return normalized[:page_count]
+
+
+def action_steps_for_focus(focus: str) -> list[str]:
+    if focus == "urgencia":
+        return [
+            "Elige una prioridad para los proximos 10 minutos.",
+            "Haz una sola accion importante sin distraerte.",
+            "Anota el resultado para repetirlo manana.",
+        ]
+    if focus == "dolor":
+        return [
+            "Detecta el error que mas te esta frenando.",
+            "Corrigelo con un cambio pequeno y claro.",
+            "Repite el cambio hasta que salga natural.",
+        ]
+    if focus == "estrategia":
+        return [
+            "Ordena el plan de mayor a menor impacto.",
+            "Define quien hace cada parte.",
+            "Revisa y mejora al final del dia.",
+        ]
+    if focus == "accion":
+        return [
+            "Haz este paso con un temporizador corto.",
+            "Valida con checklist, no por intuicion.",
+            "Pasa al siguiente paso sin pausar de mas.",
+        ]
+    if focus == "credibilidad":
+        return [
+            "Elige la duda mas comun de tu audiencia.",
+            "Responde con ejemplo real o mini prueba.",
+            "Convierte esa duda en una tarea concreta.",
+        ]
+    return [
+        "Resume el valor principal en una frase.",
+        "Muestra el beneficio mas fuerte de la oferta.",
+        "Cierra con un CTA unico y directo.",
+    ]
+
+
+def hook_for_focus(focus: str, topic: str, pain: str, objection: str, proof: str) -> str:
+    if focus == "urgencia":
+        return f"Si esto empieza hoy en '{topic}', evita este error: {pain}."
+    if focus == "dolor":
+        return f"Este error te cuesta progreso: {pain}."
+    if focus == "estrategia":
+        return "Sin metodo hay caos. Con metodo hay avance."
+    if focus == "accion":
+        return "Menos teoria, mas accion: haz esto hoy."
+    if focus == "credibilidad":
+        return f"Duda real: {objection}. Respuesta practica: {proof}."
+    return "Ya tienes el mapa. Solo falta ejecutar."
+
+
+def body_for_focus(
+    *,
+    focus: str,
+    topic: str,
+    pain: str,
+    outcome: str,
+    objection: str,
+    proof: str,
+    goal: str,
+    index: int,
+) -> list[str]:
+    openers = [
+        "No necesitas mas complicacion; necesitas claridad.",
+        "El progreso llega cuando el proceso es simple.",
+        "Si entiendes que hacer, avanzas mas rapido.",
+        "Un paso claro gana a diez ideas sueltas.",
+    ]
+    opener = pick(openers, index, openers[0])
+
+    if focus == "urgencia":
+        return [
+            f"{opener} En '{topic}', el bloqueo mas comun es: {pain}.",
+            f"Meta de esta pagina: {goal}. Resultado buscado: {outcome}.",
+            f"Si dudas por '{objection}', usa esta prueba: {proof}.",
+        ]
+    if focus == "dolor":
+        return [
+            f"Problema real: {pain}.",
+            f"Correccion propuesta: cambio simple para acercarte a {outcome}.",
+            f"Cuando aparezca '{objection}', apoya tu decision con: {proof}.",
+        ]
+    if focus == "estrategia":
+        return [
+            f"Plan simple: primero {goal}, luego ejecucion paso a paso.",
+            f"Este marco te ayuda a pasar de confusion a {outcome}.",
+            f"Respaldo practico: {proof}.",
+        ]
+    if focus == "accion":
+        return [
+            f"Esta pagina es para hacer, no para acumular teoria.",
+            f"Punto a resolver: {pain}.",
+            f"Si aplicas este paso, te acercas a: {outcome}.",
+        ]
+    if focus == "credibilidad":
+        return [
+            f"Objecion principal: {objection}.",
+            f"Respuesta directa: {proof}.",
+            f"Objetivo de esta pagina: {goal} y mantener avance hacia {outcome}.",
+        ]
+    return [
+        f"Ultimo freno: {pain}.",
+        f"La oferta convierte aprendizaje en aplicacion para lograr {outcome}.",
+        "Cierra con una accion hoy, no con una idea para despues.",
     ]
 
 
 def build_marketing_pages(brief: dict[str, Any]) -> list[dict[str, Any]]:
-    topic = str(brief.get("topic", "Supervivencia extrema")).strip()
-    offer_name = str(brief.get("offer_name", "Manual de Supervivencia")).strip()
-    cta = str(brief.get("cta", "Escribe AHORA para obtener acceso inmediato.")).strip()
+    topic = str(brief.get("topic", "Infoproducto digital")).strip()
+    cta = str(brief.get("cta", "Escribe AHORA y recibe acceso inmediato.")).strip()
     page_count = int(brief.get("page_count", 10))
 
     research = brief.get("research", {})
@@ -76,13 +281,15 @@ def build_marketing_pages(brief: dict[str, Any]) -> list[dict[str, Any]]:
     outcomes = safe_list(research.get("desired_outcomes"))
     objections = safe_list(research.get("objections"))
     proofs = safe_list(research.get("proof_points"))
+    hooks = safe_list(brief.get("headline_hooks"))
 
-    default_pain = "La mayoria pierde el control en los primeros minutos."
-    default_outcome = "Tomar decisiones frias cuando todos improvisan."
-    default_objection = "No tengo experiencia ni equipo avanzado."
-    default_proof = "Checklist practico con pasos accionables."
+    default_pain = "No tener un paso claro para empezar."
+    default_outcome = "Avanzar mas rapido con menos dudas."
+    default_objection = "No tengo tiempo o experiencia."
+    default_proof = "Checklist simple y aplicable."
+    default_hooks = ["Guia Rapida", "Sistema Practico", "Ruta Clara", "Metodo Paso a Paso"]
 
-    blueprints = page_blueprint(page_count)
+    blueprints = resolve_blueprint(brief, page_count)
     pages: list[dict[str, Any]] = []
 
     for i, bp in enumerate(blueprints, start=1):
@@ -90,57 +297,48 @@ def build_marketing_pages(brief: dict[str, Any]) -> list[dict[str, Any]]:
         outcome = pick(outcomes, i - 1, default_outcome)
         objection = pick(objections, i - 1, default_objection)
         proof = pick(proofs, i - 1, default_proof)
+        hook_prefix = pick(hooks or default_hooks, i - 1, default_hooks[0])
 
-        headline = f"{offer_name}: {bp['title'].upper()}"
-        subheadline = f"Resultado clave: {outcome}"
+        headline = f"{hook_prefix}: {bp['title']}"
+        subheadline = f"{bp['goal'].capitalize()} para llegar a {outcome}."
+        hook = hook_for_focus(bp["focus"], topic, pain, objection, proof)
+        one_liner = f"Resumen rapido: {bp['goal']} con pasos faciles de ejecutar."
 
-        if bp["focus"] == "urgencia":
-            body = [
-                f"Las primeras 72 horas en un evento extremo no se ganan con fuerza, se ganan con decision. En '{topic}', el error mas caro es este: {pain}",
-                f"Este manual te da estructura inmediata para responder sin congelarte. Si piensas '{objection}', esta es la prueba de que si puedes actuar: {proof}",
-            ]
-        elif bp["focus"] == "dolor":
-            body = [
-                f"La mayoria cae por errores previsibles, no por falta de valor. Aqui atacamos uno de los mas frecuentes: {pain}",
-                f"Con una correccion puntual puedes pasar de reaccionar tarde a tomar control rapido. Objecion comun: {objection}. Resultado que buscamos: {outcome}",
-            ]
-        elif bp["focus"] == "estrategia":
-            body = [
-                f"Sin metodo, todo se vuelve ruido. Esta seccion te entrega el marco para priorizar decisiones cuando cada minuto cuenta.",
-                f"Tomamos el problema central ({pain}) y lo convertimos en una ruta de accion concreta orientada a {outcome}.",
-            ]
-        elif bp["focus"] == "accion":
-            body = [
-                f"Aqui no hay teoria infinita: hay ejecucion. Este paso existe para resolver {pain} con instrucciones directas.",
-                f"Tu objetivo en esta fase es simple: {outcome}. Si aparece la duda '{objection}', usa la regla operativa y continua.",
-            ]
-        elif bp["focus"] == "credibilidad":
-            body = [
-                f"Antes de cerrar, desactivamos las dudas que sabotean la accion. La mas comun en este punto es: {objection}",
-                f"La evidencia practica que respalda este metodo: {proof}. Lo importante es que avances con criterio, no con improvisacion.",
-            ]
-        else:
-            body = [
-                f"Si llegaste hasta aqui, ya tienes la base para pasar del miedo al control. Falta una cosa: ejecutar sin postergar.",
-                f"Esta oferta convierte todo lo anterior en un sistema aplicable desde hoy. Problema que resuelve: {pain}. Resultado final: {outcome}.",
-            ]
+        body = body_for_focus(
+            focus=bp["focus"],
+            topic=topic,
+            pain=pain,
+            outcome=outcome,
+            objection=objection,
+            proof=proof,
+            goal=bp["goal"],
+            index=i - 1,
+        )
 
         bullets = [
-            f"Que evitar desde el minuto 1: {pain}",
-            f"Meta practica de esta seccion: {outcome}",
-            f"Respuesta directa a la duda comun: {objection}",
-            f"Prueba y respaldo: {proof}",
+            f"Bloqueo principal: {pain}",
+            f"Objetivo de pagina: {bp['goal']}",
+            f"Resultado esperado: {outcome}",
+            f"Objecion cubierta: {objection}",
+            f"Soporte: {proof}",
         ]
 
-        action_steps = [
-            "Respira, evalua riesgo y define prioridad inmediata.",
-            "Ejecuta una accion concreta en menos de 5 minutos.",
-            "Prepara el siguiente movimiento antes de agotarte.",
+        quick_wins = [
+            f"Empieza por: {bp['goal']}",
+            f"Usa esta prueba: {proof}",
+            "Mide el cambio en menos de 10 minutos",
+        ]
+        avoid_list = [
+            pain,
+            f"Detenerte por pensar: {objection}",
+            "Querer hacerlo todo al mismo tiempo",
         ]
 
-        micro_cta = "Aplica esto hoy en modo simulacion y mide tu tiempo de respuesta."
+        action_steps = action_steps_for_focus(bp["focus"])
+        micro_cta = str(brief.get("micro_cta_default", "Aplica este bloque hoy y mide el cambio."))
         if i == len(blueprints):
-            micro_cta = f"{cta} Incluye checklist, plan de ruta y protocolo de 72 horas."
+            suffix = str(brief.get("final_cta_suffix", "Incluye recursos descargables y plan de accion."))
+            micro_cta = f"{cta} {suffix}".strip()
 
         pages.append(
             {
@@ -148,14 +346,22 @@ def build_marketing_pages(brief: dict[str, Any]) -> list[dict[str, Any]]:
                 "section_title": bp["title"],
                 "headline": headline,
                 "subheadline": subheadline,
+                "hook": hook,
+                "one_liner": one_liner,
                 "body": body,
                 "bullets": bullets,
+                "quick_wins": quick_wins,
+                "avoid_list": avoid_list,
                 "action_title": "Accion inmediata",
                 "action_steps": action_steps,
                 "micro_cta": micro_cta,
+                "design_pattern": bp["pattern"],
+                "icon_hint": bp["icon"],
+                "focus": bp["focus"],
+                "page_goal": bp["goal"],
                 "image_prompt": (
-                    f"Escena cinematografica postapocaliptica para '{bp['title']}' en el tema '{topic}', "
-                    "contraste alto, composicion dinamica, tono dramatico, sin logos, sin texto largo."
+                    f"Key visual para '{bp['title']}' en el tema '{topic}'. "
+                    f"Diseno editorial limpio con patron {bp['pattern']} y jerarquia visual clara."
                 ),
             }
         )
@@ -171,6 +377,10 @@ def main() -> None:
     if page_count not in (5, 10):
         raise ValueError("page_count debe ser 5 o 10.")
 
+    brand = brief.get("brand", {})
+    if not isinstance(brand, dict):
+        brand = {}
+
     pages = build_marketing_pages(brief)
     result = {
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -178,15 +388,15 @@ def main() -> None:
         "offer_name": brief.get("offer_name", ""),
         "page_count": page_count,
         "brand": {
-            "palette": {
-                "bg": "#101319",
-                "surface": "#1C222B",
-                "accent": "#E94E1B",
-                "accent_2": "#F6C945",
-                "text": "#F4F6F8",
-                "muted": "#B8C0CC",
-            }
+            "style": str(brand.get("style", "editorial_modular")),
+            "mode": str(brand.get("mode", "dark")),
+            "palette": infer_palette(str(brief.get("topic", "")), brand),
+            "typography": {
+                "headline": str(brand.get("typography", {}).get("headline", "Anton")) if isinstance(brand.get("typography"), dict) else "Anton",
+                "body": str(brand.get("typography", {}).get("body", "Manrope")) if isinstance(brand.get("typography"), dict) else "Manrope",
+            },
         },
+        "prompting": brief.get("prompting", {}) if isinstance(brief.get("prompting"), dict) else {},
         "pages": pages,
     }
 

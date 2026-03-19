@@ -2,43 +2,45 @@
 
 ## Objetivo
 
-Generar una imagen por pagina a partir de prompts, con costo minimo.
+Crear imagenes por pagina a partir de prompts pro con control de costo.
+
+## Skill obligatoria
+
+Leer primero: `skills/nano-banana-prompting/SKILL.md`
 
 ## Requisito
 
-Definir API key de Gemini:
+Definir API key:
 
 ```powershell
 $env:GEMINI_API_KEY="tu_api_key"
 ```
 
-## Input
-
-`.tmp/infoproduct/nano_prompts.json`
-
 ## Tool
 
 `tools/nano_banana_generate.py`
 
-## Command
+## Comandos
 
 ```powershell
 python tools/nano_banana_generate.py `
-  --prompts .tmp/infoproduct/nano_prompts.json `
-  --output-dir .tmp/infoproduct/images `
+  --prompts .tmp/projects/<slug>/outputs/nano_prompts_pro.json `
+  --output-dir .tmp/projects/<slug>/images `
+  --manifest .tmp/projects/<slug>/images/manifest.json `
   --model gemini-2.5-flash-image
 ```
 
-## Modo validacion (sin costo)
+Validacion sin costo:
 
 ```powershell
 python tools/nano_banana_generate.py `
-  --prompts .tmp/infoproduct/nano_prompts.json `
-  --output-dir .tmp/infoproduct/images `
+  --prompts .tmp/projects/<slug>/outputs/nano_prompts_pro.json `
+  --output-dir .tmp/projects/<slug>/images `
+  --manifest .tmp/projects/<slug>/images/manifest.json `
   --dry-run
 ```
 
-## Salida
+## Validacion
 
-- Imagenes en `.tmp/infoproduct/images/`
-- Reporte `.tmp/infoproduct/images/manifest.json`
+- Existe `manifest.json`.
+- Cada pagina tiene estado `ok` o error claro para reintento.

@@ -1,29 +1,36 @@
-# Diseno infoproducto visual (marketing + conversion)
+# Diseno infoproducto visual
 
 ## Objetivo
 
-Pasar de brief tecnico a infoproducto visual vendible.
+Renderizar una version visual con mejor jerarquia tipografica y bloques de lectura rapida.
+
+## Skills obligatorias
+
+1. `skills/diseno-infoproducto-conversion/SKILL.md`
+2. `skills/copy-marketero-directo/SKILL.md`
 
 ## Tools
 
-- `tools/build_infoproduct_marketing.py`
 - `tools/render_infoproduct_html.py`
+- `tools/render_infoproduct_pdf_visual.py`
 
-## Flujo
+## Comandos
 
 ```powershell
-python tools/build_infoproduct_marketing.py `
-  --input .tmp/projects/zombie/inputs/brief.json `
-  --output .tmp/projects/zombie/outputs/infoproduct_marketing.json
-
 python tools/render_infoproduct_html.py `
-  --input .tmp/projects/zombie/outputs/infoproduct_marketing.json `
-  --output .tmp/projects/zombie/outputs/infoproduct_visual.html `
-  --images-dir .tmp/projects/zombie/images `
-  --title "Manual de Supervivencia Zombie 72H"
+  --input .tmp/projects/<slug>/outputs/infoproduct_marketing.json `
+  --output .tmp/projects/<slug>/outputs/infoproduct_visual.html `
+  --images-dir .tmp/projects/<slug>/images `
+  --title "<Titulo Comercial>"
+
+python tools/render_infoproduct_pdf_visual.py `
+  --input .tmp/projects/<slug>/outputs/infoproduct_marketing.json `
+  --output .tmp/projects/<slug>/outputs/infoproduct_visual.pdf `
+  --title "<Titulo Comercial>"
 ```
 
-## Salida
+## Validacion
 
-- `.tmp/projects/zombie/outputs/infoproduct_marketing.json`
-- `.tmp/projects/zombie/outputs/infoproduct_visual.html`
+- Hay bloques visuales: `hook`, `ganancias rapidas`, `evita esto`, `accion inmediata`.
+- Tipografia visible en 3 niveles: titular, subtitulo, cuerpo/listas.
+- No aparecen textos tecnicos internos tipo `PATRON: ...` en PDF final.

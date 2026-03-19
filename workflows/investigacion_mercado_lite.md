@@ -1,46 +1,18 @@
-# Investigacion mercado lite
+# Investigacion mercado lite (orquestado)
 
 ## Objetivo
 
-Tomar un tema y convertirlo en 2 a 5 ideas evaluables con señales numericas.
+Transformar un tema en ideas evaluables con señal numerica y decision GO/NO_GO.
 
-## Entrada
+## Skill obligatoria
 
-- Tema principal
-- Audiencia objetivo
-- Hallazgos de fuentes abiertas (busqueda web, comunidades, catalogos)
+Leer primero: `skills/investigacion-mercado-lite/SKILL.md`
 
-## Output
+## Tool
 
-Archivo JSON con estructura:
+`tools/research_score.py`
 
-```json
-{
-  "topic": "Tema",
-  "ideas": [
-    {
-      "id": "idea_1",
-      "title": "Nombre de idea",
-      "audience": "Segmento",
-      "signals": {
-        "demand": 0,
-        "purchase_intent": 0,
-        "competition_gap": 0,
-        "differentiation": 0,
-        "execution_ease": 0
-      },
-      "evidence": []
-    }
-  ]
-}
-```
-
-## Regla de evaluacion
-
-- Escala por señal: `0` a `10`.
-- Criterio de avance: usar `tools/research_score.py` con umbral sugerido `75`.
-
-## Command
+## Comando
 
 ```powershell
 python tools/research_score.py `
@@ -49,3 +21,8 @@ python tools/research_score.py `
   --markdown-out .tmp/research_scored.md `
   --threshold 75
 ```
+
+## Validacion
+
+- `research_scored.json` contiene `status` por idea.
+- Hay al menos una idea `GO` o una recomendacion clara de ajuste.

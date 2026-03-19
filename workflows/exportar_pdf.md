@@ -1,21 +1,28 @@
-# Exportar infoproducto a PDF
+# Exportar PDF final
 
 ## Objetivo
 
-Convertir el markdown final del infoproducto en un PDF compartible.
+Generar PDF final de lectura/comercial (sin texto tecnico interno).
 
-## Tool
+## Skills obligatorias
 
-`tools/export_infoproduct_pdf.py`
+1. `skills/diseno-infoproducto-conversion/SKILL.md`
+2. `skills/copy-marketero-directo/SKILL.md`
 
-## Command
+## Tool recomendado
+
+`tools/render_infoproduct_pdf_visual.py`
+
+## Comando
 
 ```powershell
-python tools/export_infoproduct_pdf.py `
-  --input .tmp/projects/zombie/outputs/infoproduct.md `
-  --output .tmp/projects/zombie/outputs/infoproduct.pdf
+python tools/render_infoproduct_pdf_visual.py `
+  --input .tmp/projects/<slug>/outputs/infoproduct_marketing.json `
+  --output .tmp/projects/<slug>/outputs/infoproduct_visual.pdf `
+  --title "<Titulo Comercial>"
 ```
 
-## Salida
+## Validacion
 
-- `.tmp/projects/zombie/outputs/infoproduct.pdf`
+- El PDF contiene hook, listas y CTA por pagina.
+- No contiene bloques tecnicos de depuracion.
