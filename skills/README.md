@@ -8,6 +8,7 @@ Skills creadas para el MVP:
 - `skills/mvp-infoproduct-orquestador`
 - `skills/diseno-infoproducto-conversion`
 - `skills/copy-marketero-directo`
+- `skills/prompting-imagenes-conversion`
 
 Cada skill contiene su `SKILL.md` con:
 

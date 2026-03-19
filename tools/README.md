@@ -16,6 +16,8 @@ Convenciones sugeridas:
 - `build_infoproduct_marketing.py`: genera copy marketero final por pagina.
 - `render_infoproduct_html.py`: maquetacion visual HTML con color, bloques y CTA.
 - `export_infoproduct_pdf.py`: exporta markdown a PDF simple.
+- `build_nano_prompts_pro.py`: crea prompts avanzados para imagen con consistencia de serie.
+- `render_infoproduct_pdf_visual.py`: crea PDF visual con diseño por pagina sin depender de navegador.
 
 ## Ejemplos
 

@@ -74,11 +74,25 @@ def page_block(page: dict[str, Any], image_rel: str) -> str:
             "</div>"
         )
 
+    section = str(page.get("section_title", "")).lower()
+    icon_label = "shield"
+    if "error" in section:
+        icon_label = "alert"
+    elif "paso" in section:
+        icon_label = "route"
+    elif "objec" in section:
+        icon_label = "chat"
+    elif "cierre" in section:
+        icon_label = "target"
+    elif "impacto" in section:
+        icon_label = "pulse"
+
     return f"""
     <section class="page">
       <div class="page-top">
         <span class="chip">Pagina {page["page_number"]}</span>
         <span class="chip chip-alt">{html.escape(str(page.get("section_title", "")))}</span>
+        <span class="chip chip-icon">icon:{icon_label}</span>
       </div>
       <h2>{html.escape(str(page.get("headline", "")))}</h2>
       <h3>{html.escape(str(page.get("subheadline", "")))}</h3>
@@ -209,6 +223,10 @@ def build_html(data: dict[str, Any], output_path: Path, images_dir: Path | None,
       background: rgba(246,201,69,0.2);
       border-color: rgba(246,201,69,0.45);
     }}
+    .chip-icon {{
+      background: rgba(148, 196, 255, 0.18);
+      border-color: rgba(148, 196, 255, 0.45);
+    }}
     h2 {{
       margin: 6px 0 8px;
       font-family: 'Bebas Neue', sans-serif;
@@ -227,6 +245,8 @@ def build_html(data: dict[str, Any], output_path: Path, images_dir: Path | None,
       grid-template-columns: 1.2fr 1fr;
       gap: 16px;
     }}
+    .page:nth-of-type(even) .content {{ order: 2; }}
+    .page:nth-of-type(even) .visual {{ order: 1; }}
     .content p {{
       margin: 0 0 9px;
       color: #d8dfe8;
@@ -315,6 +335,8 @@ def build_html(data: dict[str, Any], output_path: Path, images_dir: Path | None,
     }}
     @media (max-width: 900px) {{
       .grid {{ grid-template-columns: 1fr; }}
+      .page:nth-of-type(even) .content,
+      .page:nth-of-type(even) .visual {{ order: initial; }}
     }}
   </style>
 </head>

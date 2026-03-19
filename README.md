@@ -39,6 +39,7 @@ Copy-Item .env.example .env
 - `workflows/generacion_imagenes_nano.md`
 - `workflows/diseno_infoproducto_visual.md`
 - `workflows/exportar_pdf.md`
+- `workflows/prompting_imagenes_pro.md`
 
 ### Tools
 
@@ -48,6 +49,8 @@ Copy-Item .env.example .env
 - `tools/build_infoproduct_marketing.py`
 - `tools/render_infoproduct_html.py`
 - `tools/export_infoproduct_pdf.py`
+- `tools/build_nano_prompts_pro.py`
+- `tools/render_infoproduct_pdf_visual.py`
 
 ### Skills
 
@@ -57,6 +60,7 @@ Copy-Item .env.example .env
 - `skills/mvp-infoproduct-orquestador`
 - `skills/diseno-infoproducto-conversion`
 - `skills/copy-marketero-directo`
+- `skills/prompting-imagenes-conversion`
 
 ## Prueba rapida (MVP)
 
