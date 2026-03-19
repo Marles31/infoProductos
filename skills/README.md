@@ -6,6 +6,8 @@ Skills creadas para el MVP:
 - `skills/redaccion-infoproducto-5-10`
 - `skills/nano-banana-prompting`
 - `skills/mvp-infoproduct-orquestador`
+- `skills/diseno-infoproducto-conversion`
+- `skills/copy-marketero-directo`
 
 Cada skill contiene su `SKILL.md` con:
 

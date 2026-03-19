@@ -37,12 +37,26 @@ Copy-Item .env.example .env
 - `workflows/investigacion_mercado_lite.md`
 - `workflows/produccion_infoproducto.md`
 - `workflows/generacion_imagenes_nano.md`
+- `workflows/diseno_infoproducto_visual.md`
+- `workflows/exportar_pdf.md`
 
 ### Tools
 
 - `tools/research_score.py`
 - `tools/build_infoproduct.py`
 - `tools/nano_banana_generate.py`
+- `tools/build_infoproduct_marketing.py`
+- `tools/render_infoproduct_html.py`
+- `tools/export_infoproduct_pdf.py`
+
+### Skills
+
+- `skills/investigacion-mercado-lite`
+- `skills/redaccion-infoproducto-5-10`
+- `skills/nano-banana-prompting`
+- `skills/mvp-infoproduct-orquestador`
+- `skills/diseno-infoproducto-conversion`
+- `skills/copy-marketero-directo`
 
 ## Prueba rapida (MVP)
 

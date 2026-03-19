@@ -13,6 +13,9 @@ Convenciones sugeridas:
 - `research_score.py`: rankea ideas con matriz de mercado GO/NO_GO.
 - `build_infoproduct.py`: crea infoproducto 5/10 paginas + prompts de imagen.
 - `nano_banana_generate.py`: genera imagenes por lote con Gemini/Nano Banana.
+- `build_infoproduct_marketing.py`: genera copy marketero final por pagina.
+- `render_infoproduct_html.py`: maquetacion visual HTML con color, bloques y CTA.
+- `export_infoproduct_pdf.py`: exporta markdown a PDF simple.
 
 ## Ejemplos
 
